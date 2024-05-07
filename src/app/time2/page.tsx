@@ -16,7 +16,7 @@ export default function page() {
     // -----------------------------------------------------
     const [date, setDate] = useState(new Date());
     const [timeZone, setTimeZone] = useState('PST');
-    const [hour, setHour] = useState(16);
+    const [hour, setHour] = useState(0);
     const [objTime, setObjTime] = useState(PSTHours);
     const [isSubmit, setIsSubmit] = useState(false);
 
@@ -46,9 +46,9 @@ export default function page() {
         if (intervalRef.current) clearInterval(intervalRef.current);
     };
 
-    const formatTime = (time, zone) => {
-        return DateTime.fromJSDate(time, { zone }).toLocaleString(DateTime.DATETIME_MED);
-    };
+    // const formatTime = (time, zone) => {
+    //     return DateTime.fromJSDate(time, { zone }).toLocaleString(DateTime.DATETIME_MED);
+    // };
 
     function handleSubmit() {
         setIsSubmit(true);
@@ -67,14 +67,19 @@ export default function page() {
     if (date && hour && now) {
         const meetingDateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour);
         remainingTime = Math.max(0, (meetingDateTime.getTime() - now) / 1000);
+        console.log(' remainingTime ', remainingTime)
+        // if (remainingTime < 2500 && intervalRef.current) {
+        //     clearInterval(intervalRef.current);
+        // }
+
     }
 
     return (
         <div>
             <h1>Time Zone Project</h1>
             <Calendar onChange={onChange} value={date} />
-            <p>Selected Date: {date.toString()}</p>
-            <p>{timeZone}: {formatTime(date, timeZone)}</p>
+            {/* <p>Selected Date: {date.toString()}</p> */}
+            {/* <p>{timeZone}: {formatTime(date, timeZone)}</p> */}
             <select name="zone" onChange={onTimeZoneChange}>
                 <option value="PST">PST</option>
                 <option value="GMT">GMT</option>
@@ -93,7 +98,8 @@ export default function page() {
                     <p>Selected Date:  {date.getDate()}</p>
                     <p>timezone : {timeZone}</p>
                     <p>hour : {hour}</p>
-                    <p>Remaining Time: {Math.floor(remainingTime / 3600)} hours, {Math.floor((remainingTime % 3600) / 60)} minutes, {Math.floor(remainingTime % 60)} seconds</p>
+                    <p>Remaining Time: {Math.floor(remainingTime / 3600)} hours,
+                        {Math.floor((remainingTime % 3600) / 60)} minutes, {Math.floor(remainingTime % 60)} seconds</p>
                 </div>
             }
         </div>
